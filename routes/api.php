@@ -10,4 +10,6 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/requests', [CoopRequestController::class, 'store']);
     Route::get('/requests/my', [CoopRequestController::class, 'myRequests']);
+
+    Route::get('/staff/requests', [CoopRequestController::class, 'allRequests']);
 });

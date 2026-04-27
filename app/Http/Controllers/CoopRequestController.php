@@ -54,4 +54,36 @@ class CoopRequestController extends Controller
             'data' => $requests,
         ]);
     }
+
+    public function allRequests(Request $request)
+    {
+        if ($request->user()->role !== 'staff') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Only staff users can view all requests',
+            ], 403);
+        }
+
+        $query = CoopRequest::query();
+
+        if ($request->filled('status')) {
+            $request->validate([
+                'status' => 'in:pending,approved,rejected'
+            ]);
+
+            $query->where('status', $request->status);
+        }
+
+        $requests = $query->latest()->get();
+
+        $message = $requests->isEmpty()
+            ? 'No requests found'
+            : 'Requests retrieved successfully';
+
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'data' => $requests,
+        ]);
+    }
 }
