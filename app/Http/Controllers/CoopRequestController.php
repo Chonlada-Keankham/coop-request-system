@@ -15,6 +15,7 @@ class CoopRequestController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Only public users can submit requests',
+                'errors' => null,
             ], 403);
         }
         // Validate required business rules:
@@ -46,6 +47,7 @@ class CoopRequestController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Only public users can view their requests',
+                'errors' => null,
             ], 403);
         }
         // Restrict query by authenticated user's ID.
@@ -57,7 +59,7 @@ class CoopRequestController extends Controller
             'success' => true,
             'message' => 'My cooperative requests retrieved successfully',
             'data' => $requests,
-        ]);
+        ], 200);
     }
 
     // Allow staff users to view all requests and filter by status.
@@ -68,6 +70,7 @@ class CoopRequestController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Only staff users can view all requests',
+                'errors' => null,
             ], 403);
         }
 
@@ -91,7 +94,7 @@ class CoopRequestController extends Controller
             'success' => true,
             'message' => $message,
             'data' => $requests,
-        ]);
+        ], 200);
     }
     // Allow staff users to approve or reject a pending request.
     public function review(Request $request)
@@ -101,6 +104,7 @@ class CoopRequestController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Only staff users can review requests',
+                'errors' => null,
             ], 403);
         }
         // Validate review input from query params/body:
@@ -119,6 +123,7 @@ class CoopRequestController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'This request has already been reviewed',
+                'errors' => null,
             ], 400);
         }
         // Update request review result and staff note.
@@ -131,6 +136,6 @@ class CoopRequestController extends Controller
             'success' => true,
             'message' => 'Request reviewed successfully',
             'data' => $coopRequest,
-        ]);
+        ], 200);
     }
 }
