@@ -86,4 +86,40 @@ class CoopRequestController extends Controller
             'data' => $requests,
         ]);
     }
+
+    public function review(Request $request)
+    {
+        if ($request->user()->role !== 'staff') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Only staff users can review requests',
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'request_id' => 'required|integer|exists:coop_requests,id',
+            'status' => 'required|in:approved,rejected',
+            'note' => 'required|string|max:1000',
+        ]);
+
+        $coopRequest = CoopRequest::findOrFail($validated['request_id']);
+
+        if ($coopRequest->status !== 'pending') {
+            return response()->json([
+                'success' => false,
+                'message' => 'This request has already been reviewed',
+            ], 400);
+        }
+
+        $coopRequest->update([
+            'status' => $validated['status'],
+            'note' => $validated['note'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Request reviewed successfully',
+            'data' => $coopRequest,
+        ]);
+    }
 }

@@ -12,4 +12,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/requests/my', [CoopRequestController::class, 'myRequests']);
 
     Route::get('/staff/requests', [CoopRequestController::class, 'allRequests']);
+    Route::patch('/staff/requests/review', [CoopRequestController::class, 'review']);
 });
