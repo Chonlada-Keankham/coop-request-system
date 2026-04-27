@@ -132,7 +132,24 @@ Error
 ไฟล์:
 postman/coop-request-system.postman_collection.json  
 
-สามารถ import แล้วทดสอบ API ได้ทันที  
+### วิธีใช้งาน
+
+1. เปิด Postman  
+2. กด Import  
+3. เลือกไฟล์:
+   postman/coop-request-system.postman_collection.json  
+
+4. ตั้งค่า Collection Variables:
+   base_url = http://127.0.0.1:8000/api  
+
+5. เริ่มทดสอบ API ตามลำดับ:
+   - Login (Public / Staff)
+   - Create Request
+   - My Requests
+   - Staff Requests (All / Filter)
+   - Review Request
+
+ระบบจะตั้งค่า token ให้อัตโนมัติหลังจาก Login
 
 ## Summary
 
