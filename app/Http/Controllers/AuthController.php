@@ -9,6 +9,7 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    // Register a new public user and return API token.
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -17,6 +18,8 @@ class AuthController extends Controller
             'password' => 'required|string|min:6',
         ]);
 
+        // For security, self-registration is allowed only for public users.
+        // Staff accounts must be created by seeder or administrator.
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -36,6 +39,7 @@ class AuthController extends Controller
         ], 201);
     }
 
+    // Authenticate user credentials and return API token.
     public function login(Request $request)
     {
         $validated = $request->validate([
