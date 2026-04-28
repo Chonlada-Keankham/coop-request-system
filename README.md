@@ -1,161 +1,165 @@
 # Coop Request System API
 
 ## Overview
-ระบบ API สำหรับการยื่นคำขอก่อตั้งสหกรณ์ แบ่งผู้ใช้งานเป็น 2 Role:
 
-- public (ประชาชน) : สมัครสมาชิก, ยื่นคำขอ, ดูคำขอของตนเอง  
-- staff (เจ้าหน้าที่) : ดูคำขอทั้งหมด และอนุมัติ / ปฏิเสธคำขอ  
+ระบบ API สำหรับการยื่นคำขอก่อตั้งสหกรณ์ โดยแบ่งผู้ใช้งานออกเป็น 2 Role:
 
+public (ประชาชน): สมัครสมาชิก, ยื่นคำขอ, ดูคำขอของตนเอง
+staff (เจ้าหน้าที่): ดูคำขอทั้งหมด และอนุมัติ / ปฏิเสธคำขอ
 
-## Setup & Run System
+## Deployment
 
-### 1. Clone Project
+ระบบถูก Deploy บน Render
+
+Production URL:
+https://coop-request-system.onrender.com
+
+API Base URL:
+https://coop-request-system.onrender.com/api
+
+Database: PostgreSQL (Render)
+
+## Setup & Run (Local)
+1. Clone Project
 git clone https://github.com/Chonlada-Keankham/coop-request-system.git
 
-cd coop-request-system  
+cd coop-request-system
 
-### 2. Install Dependencies
-composer install  
+2. Install Dependencies
+composer install
 
-### 3. Setup Environment
-cp .env.example .env  
-php artisan key:generate  
+3. Setup Environment
+cp .env.example .env
+php artisan key:generate
 
-ตั้งค่า Database ในไฟล์ `.env`:
+4. Database (Local)
+ใช้ SQLite โดยตั้งค่า
+DB_CONNECTION=sqlite
 
-DB_CONNECTION=sqlite  
+และสร้างไฟล์
+database/database.sqlite
 
-ถ้ายังไม่มีไฟล์ฐานข้อมูล ให้สร้างไฟล์นี้
-database/database.sqlite  
+5. Run Migration + Seed
+php artisan migrate
+php artisan db:seed
 
-## Database
-โปรเจกต์นี้ใช้ SQLite สำหรับการรันบนเครื่อง local
+หรือ reset ใหม่ทั้งหมด
+php artisan migrate:fresh --seed
 
-Run Migration  
-php artisan migrate  
+6. Run Server
+php artisan serve
 
-Seed Data  
-php artisan db:seed  
-
-หรือ reset ฐานข้อมูลใหม่ทั้งหมด:
-php artisan migrate:fresh --seed  
-
-##  Run Server
-php artisan serve  
-
-URL:http://127.0.0.1:8000  
+URL สำหรับใช้งาน
+http://127.0.0.1:8000
 
 ## Seed Users (สำหรับทดสอบ)
+1. Public
+Email: public@test.com
+Password: 123456
 
-Public  
-    Email: public@test.com  
-    Password: 123456  
-
-Staff  
-    Email: staff@test.com  
-    Password: 123456  
-
+2. Staff
+Email: staff@test.com
+Password: 123456
 
 ## Authentication
+1. Register
+POST /api/register
 
-Register  
-POST /api/register  
-
-Login  
-POST /api/login  
+2. Login
+POST /api/login
 
 ## Public APIs
+1. Create Request
+POST /api/requests
 
-1. Create Request  
-POST /api/requests  
+Body
+{
+"coop_name": "Coop Test",
+"member_count": 15
+}
 
-Body:
-    {
-        "coop_name": "Coop Test",
-        "member_count": 15
-    }
-
-2. My Requests  
-GET /api/requests/my  
+2. My Requests
+GET /api/requests/my
 
 ## Staff APIs
+1. View All Requests
+GET /api/staff/requests
 
-1. View All Requests  
-GET /api/staff/requests  
+2. Filter Requests
+GET /api/staff/requests
+Query Params : 
+status=pending หรือ approved หรือ rejected
 
-2. Filter Requests 
-GET /api/staff/requests  
 
-Query Params: 
-            status=pending/ approved/ rejected
+3. Review Request
+PATCH /api/staff/requests/review
+Query Params
+request_id=1
+status=approved หรือ rejected
 
-1. Review Request  
-PATCH /api/staff/requests/review  
-
-Query Params:  
-            request_id=1  
-            status=approved  
-
-Body:
-    {
-        "note": "Approved successfully"
-    }
+Body
+{
+"note": "Approved successfully"
+}
 
 ## Response Format
-
 Success
-        {
-            "success": true,
-            "message": "Success message",
-            "data": {}
-        }
+{
+"success": true,
+"message": "Success message",
+"data": {}
+}
 
 Error
-        {
-            "success": false,
-            "message": "Error message",
-            "errors": {}
-        }
+{
+"success": false,
+"message": "Error message",
+"errors": {}
+}
 
 ## HTTP Status Codes
-
-200 OK  
-201 Created  
-400 Bad Request  
-403 Forbidden  
-404 Not Found  
-422 Validation Error  
-500 Server Error  
+200 OK
+201 Created
+400 Bad Request
+403 Forbidden
+404 Not Found
+422 Validation Error
+500 Server Error
 
 ## Postman Collection
-
 ไฟล์:
-postman/coop-request-system.postman_collection.json  
+postman/coop-request-system.postman_collection.json
 
-### วิธีใช้งาน
+วิธีใช้งาน
 
-1. เปิด Postman  
-2. กด Import  
-3. เลือกไฟล์:
-   postman/coop-request-system.postman_collection.json  
+1. เปิด Postman
+2. กด Import
+3. เลือกไฟล์ postman/coop-request-system.postman_collection.json
 
-4. ตั้งค่า Collection Variables:
-   base_url = http://127.0.0.1:8000/api  
+ตั้งค่า Variables
 
-5. เริ่มทดสอบ API ตามลำดับ:
-   - Login (Public / Staff)
-   - Create Request
-   - My Requests
-   - Staff Requests (All / Filter)
-   - Review Request
+Local
+base_url = http://127.0.0.1:8000/api
+
+Production
+base_url = https://coop-request-system.onrender.com/api
+
+ขั้นตอนทดสอบ
+
+1. Login Public
+2. Login Staff
+3. Create Request
+4. My Requests
+5. Staff Requests (All / Filter)
+6. Review Request
 
 ระบบจะตั้งค่า token ให้อัตโนมัติหลังจาก Login
 
 ## Summary
-
-- ใช้ Laravel + Sanctum  
-- Authentication ด้วย Token  
-- แบ่ง Role public / staff  
-- Public → ยื่นคำขอ + ดูของตัวเอง  
-- Staff → ดูทั้งหมด + review  
-- คำขอที่ review แล้ว → ไม่สามารถแก้ไขซ้ำได้  
+- ใช้ Laravel + Sanctum
+- Authentication แบบ Token
+- แบ่ง Role public และ staff
+- Public → ยื่นคำขอ + ดูของตัวเอง
+- Staff → ดูทั้งหมด + review
+- คำขอที่ review แล้ว ไม่สามารถแก้ไขซ้ำได้
+- รองรับทั้ง Local (SQLite) และ Production (PostgreSQL)
