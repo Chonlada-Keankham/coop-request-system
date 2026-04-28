@@ -23,26 +23,26 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Temporary route for Render free plan migration/seed debugging.
 // Use once, then remove this route after migration and seeding are completed.
-Route::get('/run-migrate', function () {
-    try {
-        Artisan::call('migrate', ['--force' => true]);
-        $migrate = Artisan::output();
+// Route::get('/run-migrate', function () {
+//     try {
+//         Artisan::call('migrate', ['--force' => true]);
+//         $migrate = Artisan::output();
 
-        Artisan::call('db:seed', ['--force' => true]);
-        $seed = Artisan::output();
+//         Artisan::call('db:seed', ['--force' => true]);
+//         $seed = Artisan::output();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Migration and seeding completed',
-            'migrate' => $migrate,
-            'seed' => $seed,
-        ], 200);
-    } catch (\Throwable $e) {
-        return response()->json([
-            'success' => false,
-            'error' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-        ], 500);
-    }
-});
+//         return response()->json([
+//             'success' => true,
+//             'message' => 'Migration and seeding completed',
+//             'migrate' => $migrate,
+//             'seed' => $seed,
+//         ], 200);
+//     } catch (\Throwable $e) {
+//         return response()->json([
+//             'success' => false,
+//             'error' => $e->getMessage(),
+//             'file' => $e->getFile(),
+//             'line' => $e->getLine(),
+//         ], 500);
+//     }
+// });
