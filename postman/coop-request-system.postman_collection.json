@@ -1,13 +1,13 @@
 {
   "info": {
-    "_postman_id": "f09ba618-632f-452d-b7ce-937616dd4946",
+    "_postman_id": "0b1a929d-d43f-4339-bf51-5f0c40c74a09",
     "name": "coop-request",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     {
       "key": "base_url",
-      "value": "http://127.0.0.1:8000/api",
+      "value": "https://coop-request-system.onrender.com/api",
       "type": "string"
     },
     {
@@ -71,13 +71,13 @@
             {
               "listen": "test",
               "script": {
+                "type": "text/javascript",
                 "exec": [
                   "const json = pm.response.json();",
                   "if (json.data && json.data.token) {",
                   "    pm.collectionVariables.set('public_token', json.data.token);",
                   "}"
-                ],
-                "type": "text/javascript"
+                ]
               }
             }
           ],
@@ -125,13 +125,13 @@
             {
               "listen": "test",
               "script": {
+                "type": "text/javascript",
                 "exec": [
                   "const json = pm.response.json();",
                   "if (json.data && json.data.token) {",
                   "    pm.collectionVariables.set('staff_token', json.data.token);",
                   "}"
-                ],
-                "type": "text/javascript"
+                ]
               }
             }
           ],
